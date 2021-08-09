@@ -23,7 +23,7 @@ class Population:
 
     def generate_initial_chromossomes(self, population_size: int, X_size: int):
         population  = [ Chromossome(self.create_random_genes(X_size)) \
-                for i in range(population_size) ]
+                for _ in range(population_size) ]
 
         return population
 
