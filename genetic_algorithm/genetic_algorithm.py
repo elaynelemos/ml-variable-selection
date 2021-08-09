@@ -42,10 +42,10 @@ def kept_fit(generations):
     average = average_fits[init]
     best = best_fits[init]
     for i in range(init + 1, len(average_fits)):
-        if abs(average_fits[i] - average) < target_error:
+        if abs(average_fits[i] - average) > target_error:
             average = None
 
-        if abs(best_fits[i] - best) < target_error:
+        if abs(best_fits[i] - best) > target_error:
             best = None
 
         if average is None and best is None:
