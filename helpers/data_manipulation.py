@@ -1,16 +1,11 @@
 from pandas import DataFrame
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import r2_score as score
-from sklearn.neighbors import KNeighborsRegressor
 
 
-def preparate_database(database: DataFrame, active_columns: str):
-    cols = [ x for x in range(len(active_columns)) if active_columns[x] == '0' ]
-    cols.append(-1)
-
+def prepare_database(database: DataFrame):
     X_train, X_test, y_train, y_test = train_test_split(
-        database.drop(database.columns[cols], axis=1),
-        database['Y'],
+        database.iloc[:,:-1],
+        database.iloc[:,-1],
         test_size=0.3,
         random_state=5
     )
@@ -18,8 +13,7 @@ def preparate_database(database: DataFrame, active_columns: str):
     return X_train, X_test, y_train, y_test
 
 
-def r2_score(X_train, X_test, y_train, y_test):
-    classifier = KNeighborsRegressor(3).fit(X_train, y_train.values.ravel())
-    y_predict = classifier.predict(X_test)
+def filter_database(df: DataFrame, active_columns: str):
+    cols = [ x for x in range(len(active_columns)) if active_columns[x] == '0' ]
 
-    return score(y_true=y_test, y_pred=y_predict)
+    return df.drop(df.columns[cols], axis=1)
