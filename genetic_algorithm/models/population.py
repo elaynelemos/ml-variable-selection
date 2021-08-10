@@ -13,7 +13,7 @@ class Population:
 
 
     def create_random_genes(self, X_size: int):
-        positions = list(range(X_size))
+        positions = range(X_size)
         genes = ''.join('0' for _ in positions)
         replacements = random.sample(positions, random.randint(3, 10))
 
@@ -32,7 +32,6 @@ class Population:
 
     def best_fit(self):
         best_chromossome = self.chromossomes[0]
-
         for chromossome in self.chromossomes:
             if chromossome.fit < best_chromossome.fit:
                 best_chromossome = chromossome
@@ -42,7 +41,6 @@ class Population:
 
     def worst_fit(self):
         worst_chromossome = self.chromossomes[0]
-
         for chromossome in self.chromossomes:
             if chromossome.fit > worst_chromossome.fit:
                 worst_chromossome = chromossome
@@ -52,7 +50,6 @@ class Population:
 
     def average_fit(self):
         total_fit = 0
-
         for chromossome in self.chromossomes:
             total_fit += chromossome.fit
 
@@ -60,7 +57,7 @@ class Population:
 
 
     def tournment(self):
-        index = random.sample(list(range(self.population_size)), 2)
+        index = random.sample(range(self.population_size), 2)
         parents = [self.chromossomes[index[0]], self.chromossomes[index[1]]]
 
         if parents[0].fit < parents[1].fit:
@@ -79,40 +76,23 @@ class Population:
 
         parents = [
             self.chromossomes[parents_index[0]],
-            self.chromossomes[parents_index[1]]]
-
+            self.chromossomes[parents_index[1]],
+        ]
         if random.random() > cross_index:
             return parents
 
         children = ['', '']
-        slices = random.sample(list(range(1, 40)), 2)
-        slices.sort()
+        children[0] = parents[0].genes
+        children[1] = parents[1].genes
+        for i in range(len(children[0])):
+            if i%2 == 1:
+                children[0][i] = parents[1].genes[i]
+                children[1][i] = parents[0].genes[i]
 
-        children[0] = ''.join([
-            parents[0].genes[0:slices[0]],
-            parents[1].genes[slices[0]:slices[1]],
-            parents[0].genes[slices[1]:],
-        ])
-        children[1] = ''.join([
-            parents[1].genes[0:slices[0]],
-            parents[0].genes[slices[0]:slices[1]],
-            parents[1].genes[slices[1]:],
-        ])
-
-        children[0] = Chromossome(children[0]).mutation(
-            self.mutation_rate,
-            self.X_train,
-            self.X_test,
-            self.y_train,
-            self.y_test
-        )
-        children[1] = Chromossome(children[1]).mutation(
-            self.mutation_rate,
-            self.X_train,
-            self.X_test,
-            self.y_train,
-            self.y_test
-        )
+        children[0] = Chromossome(children[0]).mutation(self.mutation_rate,
+            self.X_train, self.X_test, self.y_train, self.y_test)
+        children[1] = Chromossome(children[1]).mutation(self.mutation_rate,
+            self.X_train, self.X_test, self.y_train, self.y_test)
 
         return children
 
