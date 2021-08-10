@@ -1,7 +1,7 @@
 import random
 from pandas import DataFrame
 from genetic_algorithm.models.chromossome import Chromossome
-from helpers.data_manipulation import preparate_database
+from helpers.data_manipulation import prepare_database
 
 
 class Population:
@@ -9,7 +9,7 @@ class Population:
         self.chromossomes = self.generate_initial_chromossomes(population_size)
         self.population_size = population_size
         self.mutation_rate = mutation_rate
-        self.structured_database = preparate_database(database)
+        self.X_train, self.X_test, self.y_train, self.y_test = prepare_database(database)
 
     def create_random_genes(self, X_size: int):
         genes = ''.join('0' for _ in range(X_size))
@@ -78,7 +78,7 @@ class Population:
             return parents
 
         children = ['', '']
-        slices = random.sample(list(range(1, 4)), 2)
+        slices = random.sample(list(range(1, 40)), 2)
         slices.sort()
 
         children[0] = ''.join([
@@ -92,8 +92,20 @@ class Population:
             parents[1].genes[slices[1]:],
         ])
 
-        children[0] = Chromossome(children[0]).mutation()
-        children[1] = Chromossome(children[1]).mutation()
+        children[0] = Chromossome(children[0]).mutation(
+            self.mutation_rate,
+            self.X_train,
+            self.X_test,
+            self.y_train,
+            self.y_test
+        )
+        children[1] = Chromossome(children[1]).mutation(
+            self.mutation_rate,
+            self.X_train,
+            self.X_test,
+            self.y_train,
+            self.y_test
+        )
 
         return children
 
