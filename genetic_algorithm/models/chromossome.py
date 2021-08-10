@@ -15,14 +15,13 @@ class Chromossome:
             y_test
         )
 
-    def value(self):
-        return self.genes
 
     def fitness(self, X_train, X_test, y_train, y_test):
         classifier = KNeighborsRegressor(3).fit(X_train, y_train.values.ravel())
         y_predict = classifier.predict(X_test)
 
         return r2_score(y_true=y_test.values.ravel(), y_pred=y_predict)
+
 
     def mutation(self, mutation_rate: float, X_train, X_test, y_train, y_test):
         genes_len = len(self.genes)

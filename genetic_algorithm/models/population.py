@@ -11,9 +11,10 @@ class Population:
         self.mutation_rate = mutation_rate
         self.X_train, self.X_test, self.y_train, self.y_test = prepare_database(database)
 
+
     def create_random_genes(self, X_size: int):
-        genes = ''.join('0' for _ in range(X_size))
         positions = list(range(X_size))
+        genes = ''.join('0' for _ in positions)
         replacements = random.sample(positions, random.randint(3, 10))
 
         for i in replacements:
@@ -21,11 +22,13 @@ class Population:
 
         return genes
 
+
     def generate_initial_chromossomes(self, population_size: int, X_size: int):
         population  = [ Chromossome(self.create_random_genes(X_size)) \
                 for _ in range(population_size) ]
 
         return population
+
 
     def best_fit(self):
         best_chromossome = self.chromossomes[0]
@@ -36,6 +39,7 @@ class Population:
 
         return best_chromossome
 
+
     def worst_fit(self):
         worst_chromossome = self.chromossomes[0]
 
@@ -45,6 +49,7 @@ class Population:
 
         return worst_chromossome
 
+
     def average_fit(self):
         total_fit = 0
 
@@ -52,6 +57,7 @@ class Population:
             total_fit += chromossome.fit
 
         return total_fit/self.population_size
+
 
     def tournment(self):
         index = random.sample(list(range(self.population_size)), 2)
@@ -61,6 +67,7 @@ class Population:
             return index[0]
 
         return index[1]
+
 
     def crossover(self):
         cross_index = 0.6
