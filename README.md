@@ -4,10 +4,10 @@
 Variable selection for machine learning application.
 
 
-### Config
+## Config
 - Python version: 3.8
 
-### To start developing
+## To start developing
 1. Initialize a new virtualenv
 ```shell-session
 virtualenv -p 3.8 .virtualenv
@@ -21,12 +21,12 @@ source .virtualenv/bin/activate
 pip install -r requirements.txt
 ```
 
-### Start jupyter
+## Start jupyter
 ```shell-session
 jupyter notebook
 ```
 
-### Credits
+## Credits
 - Elayne Lemos [@elaynelemos](https://github.com/elaynelemos)
 - Edjair Aguiar Filho [@edjairaguiar](https://github.com/edjairaguiar)
 - Anísio Batista Filho [@anisiobfilho](https://github.com/anisiobfilho)
