@@ -9,13 +9,15 @@ def genetic_algorithm(
             database: DataFrame):
 
     population = Population(population_size, mutation_rate, database)
-    generations = []
+    generations = [ population ]
 
     while len(generations) < max_generations and not kept_fit(generations):
-        generations.append(population)
         print_generation(len(generations), population)
+        chromossomes = population.reproduction()
 
-        population.reproduction()
+        population = Population(population_size, mutation_rate, database)
+        population.chromossomes = chromossomes
+        generations.append(population)
 
     solution = generations[-1].best_fit().value()
     print(f"\n\nChromossome '{solution}' => {generations[-1].best_fit().fit}")
@@ -24,20 +26,25 @@ def genetic_algorithm(
 
 
 def kept_fit(generations):
+    average_fits = []
     best_fits = []
-    target_error = 1e-8
+    target_error = 1e-4
     min_generations = 5
 
     if len(generations) < min_generations:
         return False
 
     for generation in generations:
+        average_fits.append(generation.average_fit())
         best_fits.append(generation.best_fit().fit)
 
+    print(average_fits)
+    print(best_fits)
     init = len(generations) - min_generations + 1
+    average = average_fits[init]
     best = best_fits[init]
-    for i in range(init + 1, len(best_fits)):
-        if abs(best_fits[i] - best) > target_error:
+    for i in range(init + 1, len(average_fits)):
+        if abs(average_fits[i] - average) > target_error or abs(best_fits[i] - best) > target_error:
             return False
 
     return True

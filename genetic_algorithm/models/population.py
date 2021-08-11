@@ -35,7 +35,7 @@ class Population:
     def best_fit(self):
         best_chromossome = self.chromossomes[0]
         for chromossome in self.chromossomes:
-            if chromossome.fit < best_chromossome.fit:
+            if chromossome.fit > best_chromossome.fit:
                 best_chromossome = chromossome
 
         return best_chromossome
@@ -44,7 +44,7 @@ class Population:
     def worst_fit(self):
         worst_chromossome = self.chromossomes[0]
         for chromossome in self.chromossomes:
-            if chromossome.fit > worst_chromossome.fit:
+            if chromossome.fit < worst_chromossome.fit:
                 worst_chromossome = chromossome
 
         return worst_chromossome
@@ -109,5 +109,10 @@ class Population:
             new_chromossomes += self.crossover()
 
         new_chromossomes.append(best_chromossome)
+        old_chromossomes = self.chromossomes
         self.chromossomes = new_chromossomes
         self.chromossomes.remove(self.worst_fit())
+        new_chromossomes =  self.chromossomes
+        self.chromossomes = old_chromossomes
+
+        return new_chromossomes
