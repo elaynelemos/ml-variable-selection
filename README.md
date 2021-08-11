@@ -24,3 +24,8 @@ pip install -r requirements.txt
 ```shell-session
 jupyter notebook
 ```
+
+### Credits
+- Elayne Lemos [@elaynelemos](https://github.com/elaynelemos)
+- Edjair Aguiar Filho [@edjairaguiar](https://github.com/edjairaguiar)
+- Anísio Batista Filho [@anisiobfilho](https://github.com/anisiobfilho)
