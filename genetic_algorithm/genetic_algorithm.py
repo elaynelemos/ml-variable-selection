@@ -38,8 +38,6 @@ def kept_fit(generations):
         average_fits.append(generation.average_fit())
         best_fits.append(generation.best_fit().fit)
 
-    print(average_fits)
-    print(best_fits)
     init = len(generations) - min_generations + 1
     average = average_fits[init]
     best = best_fits[init]
