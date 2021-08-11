@@ -1,4 +1,5 @@
 # Variable Selection Application
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/elaynelemos/ml-variable-selection/blob/main/LICENSE)
 
 Variable selection for machine learning application.
 
