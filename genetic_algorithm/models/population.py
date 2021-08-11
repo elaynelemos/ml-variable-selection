@@ -6,19 +6,19 @@ from helpers.data_manipulation import prepare_database
 
 class Population:
     def __init__(self, population_size: int, mutation_rate: int, database: DataFrame):
-        self.chromossomes = self.generate_initial_chromossomes(population_size)
         self.population_size = population_size
         self.mutation_rate = mutation_rate
         self.X_train, self.X_test, self.y_train, self.y_test = prepare_database(database)
+        self.chromossomes = self.generate_initial_chromossomes(
+            population_size,
+            database.shape[1] - 1
+        )
 
 
     def create_random_genes(self, X_size: int):
         positions = range(X_size)
-        genes = ''.join('0' for _ in positions)
-        replacements = random.sample(positions, random.randint(3, 10))
-
-        for i in replacements:
-            genes[i] = '1'
+        replacements = random.sample(positions, random.randint(3, 12))
+        genes = ''.join(('0' if i not in replacements else '1') for i in positions)
 
         return genes
 
@@ -69,7 +69,7 @@ class Population:
 
 
     def crossover(self):
-        cross_index = 0.6
+        cross_index = 0.85
         parents_index = []
         while len(parents_index) < 2:
             index = self.tournment()
@@ -86,14 +86,16 @@ class Population:
         children = ['', '']
         children[0] = parents[0].genes
         children[1] = parents[1].genes
-        for i in range(len(children[0])):
-            if i%2 == 1:
-                children[0][i] = parents[1].genes[i]
-                children[1][i] = parents[0].genes[i]
+        children[0] = ''.join((parents[1].genes[i] if i%2 == 1 else children[0][i]) for i in range(len(children[0])))
+        children[1] = ''.join((parents[0].genes[i] if i%2 == 1 else children[1][i]) for i in range(len(children[1])))
 
-        children[0] = Chromossome(children[0]).mutation(self.mutation_rate,
+        children[0] = Chromossome(
+            children[0], self.X_train, self.X_test, self.y_train, self.y_test
+        ).mutation(self.mutation_rate,
             self.X_train, self.X_test, self.y_train, self.y_test)
-        children[1] = Chromossome(children[1]).mutation(self.mutation_rate,
+        children[1] = Chromossome(
+            children[1], self.X_train, self.X_test, self.y_train, self.y_test
+        ).mutation(self.mutation_rate,
             self.X_train, self.X_test, self.y_train, self.y_test)
 
         return children
